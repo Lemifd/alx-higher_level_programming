@@ -10,5 +10,3 @@ def uppercase(str):
         elif ord(c) == 32:
             new_str=new_str + " "
     print("{:s}".format(new_str))
-while 1:
-    uppercase(input("enter"))
