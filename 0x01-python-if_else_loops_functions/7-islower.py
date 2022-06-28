@@ -5,6 +5,4 @@ def islower(c):
     else:
         return False
 
-while True:
-    c=input("enter")
-    print(islower(c))
+
