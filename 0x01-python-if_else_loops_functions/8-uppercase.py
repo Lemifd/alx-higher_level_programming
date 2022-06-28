@@ -7,4 +7,8 @@ def uppercase(str):
             new_str = new_str + c
         elif ord(c) >= 65 and ord(c) <= 90:
             new_str = new_str + c
+        elif ord(c) == 32:
+            new_str=new_str + " "
     print("{:s}".format(new_str))
+while 1:
+    uppercase(input("enter"))
