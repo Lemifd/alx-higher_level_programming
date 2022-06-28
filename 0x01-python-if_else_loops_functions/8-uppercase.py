@@ -9,4 +9,6 @@ def uppercase(str):
             new_str = new_str + c
         elif ord(c) == 32:
             new_str=new_str + " "
+        else:
+            new_str = new_str + c
     print("{:s}".format(new_str))
