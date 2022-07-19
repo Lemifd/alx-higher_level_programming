@@ -1,84 +1,115 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <Python.h>
-#include <floatobject.h>
-#include <string.h>
-
 
 /**
- * print_python_float - prints inflo about pYthon float.
- * @p: address of PyObject struct.
-*/
-void print_python_float(PyObject *p)
-{
-	double d;
-
-		setbuf(stdout, NULL);
-		printf("[.] float object info\n");
-		if (strcmp(p->ob_type->tp_name, "float"))
-		{
-			printf(" [ERROR] Invalid Float Object\n");
-			return;
-		}
-
-	d = ((PyFloatObject *)p)->ob_fval;
-		printf(" value: %s\n",
-			PyOS_double_to_string(d, 'r', 0, Py_DTSF_ADD_DOT_0, NULL));
-}
-
-
-/**
- * print_python_bytes - prints info about Python bytes.
- * @p: address of PyObject struct.
-*/
+ * print_python_bytes - Prints bytes information
+ *
+ * @p: Python Object
+ * Return: no return
+ */
 void print_python_bytes(PyObject *p)
 {
-	size_t i, len, size;
-	char *str;
+	char *string;
+	long int size, i, limit;
 
 	setbuf(stdout, NULL);
+
 	printf("[.] bytes object info\n");
-	if (strcmp(p->ob_type->tp_name, "bytes"))
+	if (!PyBytes_Check(p))
 	{
-		printf(" [ERROR] Invalid Bytes Object\n");
+		printf("  [ERROR] Invalid Bytes Object\n");
+		setbuf(stdout, NULL);
 		return;
 	}
-	size = ((PyVarObject *)p)->ob_size;
-	str = ((PyBytesObject *)p)->ob_sval;
-	len = size + 1 > 10 ? 10 : size + 1;
-	printf(" size: %lu\n", size);
-	printf(" trying string: %s\n", str);
-	printf(" first %lu bytes: ", len);
-	for (i = 0; i < len; i++)
-		printf("%02hhx%s", str[i], i + 1 < len ? " " : "");
+
+	size = ((PyVarObject *)(p))->ob_size;
+	string = ((PyBytesObject *)p)->ob_sval;
+
+	printf("  size: %ld\n", size);
+	printf("  trying string: %s\n", string);
+
+	if (size >= 10)
+		limit = 10;
+	else
+		limit = size + 1;
+
+	printf("  first %ld bytes:", limit);
+
+	for (i = 0; i < limit; i++)
+		if (string[i] >= 0)
+			printf(" %02x", string[i]);
+		else
+			printf(" %02x", 256 + string[i]);
+
 	printf("\n");
+	setbuf(stdout, NULL);
 }
 
+/**
+ * print_python_float - Prints float information
+ *
+ * @p: Python Object
+ * Return: no return
+ */
+void print_python_float(PyObject *p)
+{
+	double val;
+	char *nf;
+
+	setbuf(stdout, NULL);
+	printf("[.] float object info\n");
+
+	if (!PyFloat_Check(p))
+	{
+		printf("  [ERROR] Invalid Float Object\n");
+		setbuf(stdout, NULL);
+		return;
+	}
+
+	val = ((PyFloatObject *)(p))->ob_fval;
+	nf = PyOS_double_to_string(val, 'r', 0, Py_DTSF_ADD_DOT_0, Py_DTST_FINITE);
+
+	printf("  value: %s\n", nf);
+	setbuf(stdout, NULL);
+}
 
 /**
- * print_python_list - prints info about Python lists.
- * @p: address of PyObject struct.
-*/
+ * print_python_list - Prints list information
+ *
+ * @p: Python Object
+ * Return: no return
+ */
 void print_python_list(PyObject *p)
 {
-	int i;
+	long int size, i;
+	PyListObject *list;
+	PyObject *obj;
 
 	setbuf(stdout, NULL);
 	printf("[*] Python list info\n");
-	if (strcmp(p->ob_type->tp_name, "list"))
+
+	if (!PyList_Check(p))
 	{
-		printf(" [ERROR] Invalid List Object\n");
+		printf("  [ERROR] Invalid List Object\n");
+		setbuf(stdout, NULL);
 		return;
 	}
-	printf("[*] Size of the Python List = %lu\n", ((PyVarObject *)p)->ob_size);
-	printf("[*] Allocated = %lu\n", ((PyListObject *)p)->allocated);
-	for (i = 0; i < ((PyVarObject *)p)->ob_size; i++)
+
+	size = ((PyVarObject *)(p))->ob_size;
+	list = (PyListObject *)p;
+
+	printf("[*] Size of the Python List = %ld\n", size);
+	printf("[*] Allocated = %ld\n", list->allocated);
+
+	for (i = 0; i < size; i++)
 	{
-		printf("Element %d: %s\n", i,
-			((PyListObject *)p)->ob_item[i]->ob_type->tp_name);
-		if (!strcmp(((PyListObject *)p)->ob_item[i]->ob_type->tp_name, "bytes"))
-			print_python_bytes(((PyListObject *)p)->ob_item[i]);
-		else if (!strcmp(((PyListObject *)p)->ob_item[i]->ob_type->tp_name, "float"))
-			print_python_float(((PyListObject *)p)->ob_item[i]);
+		obj = list->ob_item[i];
+		printf("Element %ld: %s\n", i, ((obj)->ob_type)->tp_name);
+
+		if (PyBytes_Check(obj))
+			print_python_bytes(obj);
+		if (PyFloat_Check(obj))
+			print_python_float(obj);
 	}
+	setbuf(stdout, NULL);
 }
