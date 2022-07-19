@@ -69,8 +69,8 @@ class Square:
         for i in range(self.__position[1]):
             print()
         for j in range(self.__size):
-            print("".join([" " for k in range(self.__position[0])]), end="")
-            print("".join(["#" for l in range(self.__size)]))
+            print("".join([" " for i in range(self.__position[0])]), end="")
+            print("".join(["#" for i in range(self.__size)]))
 
     @property
     def position(self):
