@@ -45,6 +45,8 @@ Checking both float:
 	 >>> add_integer(2.45, 3.1)
 	 5
 
+#invalid arguements
+
 Checking for passed NaN:
 	 >>> add_integer(1, float('nan'))
 	 Traceback (most recent call last):
@@ -90,21 +92,3 @@ Checking number with bool:
          Traceback (most recent call last):
          ...
          TypeError: b must be an integer
-
-Checking no args:
-	 >>> add_integer()
-	 Traceback (most recent call last):
-	 ...
-	 TypeError: add_integer() missing 2 required positional arguments: 'a' and 'b'
-
-Checking one arg:
-	 >>> add_integer(1)
-	 Traceback (most recent call last):
-         ...
-	 TypeError: add_integer() missing 1 required positional argument: 'b'
-
-Checking more than 2 args:
-	 >>> add_integer(1, 2, 3)
-         Traceback (most recent call last):
-         ...
-         TypeError: add_integer() takes 2 positional arguments but 3 were given
