@@ -1,21 +1,19 @@
 #!/usr/bin/python3
 """
-    100-my_int: class MyInt implements int
+Contains the class MyInt
 """
 
 
 class MyInt(int):
-    """
-        MyInt implements int. (inherits from)
-    """
-    def __init__(self, number):
-        self.number = number
+    """rebel version of an integer, perfect for opposite day!"""
+    def __new__(cls, *args, **kwargs):
+        """create a new instance of the class"""
+        return super(MyInt, cls).__new__(cls, *args, **kwargs)
 
-    def __ne__(self, value):
-        return (self.number == value)
+    def __eq__(self, other):
+        """what was != is now =="""
+        return int(self) != other
 
-    def __eq__(self, value):
-        return (self.number != value)
-
-    def __str__(self):
-        return (str(self.number))
+    def __ne__(self, other):
+        """what was == is now !="""
+        return int(self) == other

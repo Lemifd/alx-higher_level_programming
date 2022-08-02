@@ -1,1 +1,1 @@
-# Python inheritance
+#Python Inheritance
