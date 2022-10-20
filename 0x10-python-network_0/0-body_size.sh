@@ -1,3 +1,3 @@
 #!/bin/bash
-# displays size of body in bytes
-curl -i $1 | grep Content-Length | tail -c 4
+# This program takes in a URL, sends a request to that URL, and displays the size of the body of the response.
+curl -sI "$1" | grep "Content-Length:" | cut -d' ' -f2
