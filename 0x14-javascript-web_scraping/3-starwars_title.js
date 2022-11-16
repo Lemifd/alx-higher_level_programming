@@ -1,9 +1,12 @@
 #!/usr/bin/node
-
 const request = require('request');
-const starWarsUri = 'https://swapi-api.hbtn.io/api/films/'.concat(process.argv[2]);
+const BASE_URL = 'https://swapi-api.hbtn.io/api';
 
-request(starWarsUri, function (_err, _res, body) {
-  body = JSON.parse(body);
-  console.log(body.title);
-});
+if (process.argv.length > 2) {
+  request(`${BASE_URL}/films/${process.argv[2]}/`, (err, res, body) => {
+    if (err) {
+      console.log(err);
+    }
+    console.log(JSON.parse(body).title);
+  });
+}
