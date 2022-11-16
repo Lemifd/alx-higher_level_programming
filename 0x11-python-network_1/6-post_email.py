@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 """
-Use requests package to make a post request sending email param
-and display body of response.
+    Script that takes in a URL and an email sends a POST request to that URL
+    with the email as a parameter.
+    Displays the body of the response
 """
-import sys
 import requests
+import sys
+
 
 if __name__ == "__main__":
-    url = sys.argv[1]
-    payload = {'email': sys.argv[2]}
-    r = requests.post(url, data=payload)
-    print(r.text)
+    r = requests.post(sys.argv[1], data={'email': sys.argv[2]})
+    print("{}".format(r.text))
