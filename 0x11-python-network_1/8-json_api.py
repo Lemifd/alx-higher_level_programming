@@ -1,27 +1,21 @@
 #!/usr/bin/python3
-"""
-Use requests package to make a post request to given URL with argument
-set in variable `q`, defaulting to empty string. If response body is properly
-JSON formatted and not empty, display `id` and `name` as given format.
-Otherwise display error message.
-"""
+"""Sends a search parameter to a URL."""
 import sys
 import requests
 
-if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        arg = sys.argv[1]
-    else:
-        arg = ""
-    payload = {'q': arg}
-    url = "http://0.0.0.0:5000/search_user"
-    r = requests.post(url, data=payload)
+
+if __name__ == '__main__':
+    url = 'http://0.0.0.0:5000/search_user'
+    query = sys.argv[1] if len(sys.argv) > 1 else ""
+    # if len(query) > 0 and not query[0].isalpha():
+    #     query = ""
+    form_data = [('q', query)]
+    response = requests.post(url, data=form_data)
     try:
-        r.raise_for_status()
-        json = r.json()
-        if len(json) == 0:
-            print("No result")
+        json_content = response.json()
+        if json_content:
+            print('[{}] {}'.format(json_content['id'], json_content['name']))
         else:
-            print("[{:d}] {}".format(json['id'], json['name']))
+            print('No result')
     except Exception:
-        print("Not a valid JSON")
+        print('Not a valid JSON')

@@ -1,8 +1,10 @@
 #!/usr/bin/python3
-"""Take in a URL, send request to URL and display value of `X-Request-Id`"""
+""" print request id """
+import urllib.request
 import sys
-from urllib import request
+
 
 if __name__ == "__main__":
-    with request.urlopen(sys.argv[1]) as res:
-        print(res.info()['X-Request-Id'])
+    with urllib.request.urlopen(sys.argv[1]) as response:
+        ri = response.getheader('X-Request-Id')
+        print(ri)
