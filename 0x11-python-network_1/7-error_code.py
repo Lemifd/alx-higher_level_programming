@@ -1,15 +1,16 @@
 #!/usr/bin/python3
 """
-    Script that takes in a URL sends a POST request to that URL
-    Displays the body of the response
+Use requests package to make a get request to given URL and display
+the body of response, or error code if error.
 """
-import requests
 import sys
-
+import requests
 
 if __name__ == "__main__":
-    r = requests.get(sys.argv[1])
-    if r.status_code >= 400:
+    url = sys.argv[1]
+    r = requests.get(url)
+    try:
+        r.raise_for_status()
+        print(r.text)
+    except Exception as e:
         print("Error code: {}".format(r.status_code))
-    else:
-        print("{}".format(r.text))
