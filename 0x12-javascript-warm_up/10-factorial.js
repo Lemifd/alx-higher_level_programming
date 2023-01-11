@@ -1,8 +1,16 @@
 #!/usr/bin/node
-function factorial (x) {
-  if (!x || x === 0) {
+/**
+ * factorial - Computes the factorial of a number.
+ * @param {Number} num - The number.
+ *
+ * @returns The factorial of the number.
+ */
+function factorial (num) {
+  if (Number.isNaN(num) || (num <= 0)) {
     return 1;
+  } else {
+    return num * factorial(num - 1);
   }
-  return factorial(x - 1) * x;
 }
-console.log(factorial(process.argv[2]));
+
+console.log(factorial(Number.parseInt(process.argv[2])));
